@@ -58,7 +58,7 @@ public class Planeta implements Planetable {
     private void calcularPosicionAngular(){
         Integer posAngular = this.posicionAngular + this.movimientoAngular;
         if( posAngular < 0 ){
-            posAngular = GRADO_360 = posAngular;
+            posAngular = GRADO_360 - posAngular;
         } else  if (posAngular > GRADO_360){
             posAngular = posAngular - GRADO_360;
         }

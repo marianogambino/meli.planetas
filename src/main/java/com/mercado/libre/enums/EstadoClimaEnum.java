@@ -4,8 +4,8 @@ package com.mercado.libre.enums;
  *
  */
 public enum EstadoClimaEnum {
-    SEQUIA("Lluvia"),
-    LLUVIA("Sequia"),
+    SEQUIA("Sequia"),
+    LLUVIA("Lluvia"),
     NUBLADO("Nublado"),
     CONDICIONES_NORMALES("Condiciones Normales de Presion y Temperatura");
 
