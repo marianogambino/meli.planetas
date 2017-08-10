@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class PrediccionClimaTest {
 
     private Map<EstadoClimaEnum, List<List<Integer>>> periodos = new HashMap<EstadoClimaEnum, List<List<Integer>>>();
 
-    private Double perimetroMax = 0D;
+    private BigDecimal perimetroMax = BigDecimal.ZERO;
     private Integer diaMaxLluvia = 0;
 
 
@@ -66,7 +67,7 @@ public class PrediccionClimaTest {
             if(estaAlineados){ // forman una recta
 
                 Boolean estaAlineadosConSol = CalculoTrigonometrico.estanAlineados(
-                                                                0D, 0D,
+                        BigDecimal.ZERO, BigDecimal.ZERO,
                                                                  ferengi.getPunto().getX(), ferengi.getPunto().getY(),
                                                                  vulcano.getPunto().getX(),vulcano.getPunto().getY() );
 
@@ -86,23 +87,23 @@ public class PrediccionClimaTest {
                 Boolean orientacionA1A2P =
                         CalculoTrigonometrico.calcularOrientacion(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
                                 vulcano.getPunto().getX(),vulcano.getPunto().getY(),
-                                0D,0D);
+                                BigDecimal.ZERO,BigDecimal.ZERO);
 
                 Boolean orientacionA2A3P =
                         CalculoTrigonometrico.calcularOrientacion(vulcano.getPunto().getX(),vulcano.getPunto().getY(),
-                                betasoide.getPunto().getX(), betasoide.getPunto().getY(), 0D, 0D);
+                                betasoide.getPunto().getX(), betasoide.getPunto().getY(), BigDecimal.ZERO,BigDecimal.ZERO);
 
                 Boolean orientacionA3A1P =
                         CalculoTrigonometrico.calcularOrientacion(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
-                                betasoide.getPunto().getX(), betasoide.getPunto().getY(), 0D,0D);
+                                betasoide.getPunto().getX(), betasoide.getPunto().getY(), BigDecimal.ZERO,BigDecimal.ZERO);
 
                 if(orientacionInicial == orientacionA1A2P ==  orientacionA2A3P == orientacionA3A1P){
                     diasEstados.put(i, EstadoClimaEnum.LLUVIA);
 
-                    Double perimetro = CalculoTrigonometrico.calcularPerimetro(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
+                    BigDecimal perimetro = CalculoTrigonometrico.calcularPerimetro(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
                             vulcano.getPunto().getX(),vulcano.getPunto().getY(),
                             betasoide.getPunto().getX(), betasoide.getPunto().getY());
-                    if(perimetro > perimetroMax){
+                    if(perimetro.compareTo(perimetroMax) > 0 ){
                         perimetroMax = perimetro;
                         diaMaxLluvia = i;
                     }
@@ -116,8 +117,8 @@ public class PrediccionClimaTest {
 
         }
 
-        Assert.assertEquals(diasEstados.get(566).estado(), EstadoClimaEnum.LLUVIA.estado());
-        Assert.assertTrue(diaMaxLluvia == 611);
+        Assert.assertEquals(diasEstados.get(567).estado(), EstadoClimaEnum.LLUVIA.estado());
+        Assert.assertTrue(diaMaxLluvia == 202);
 
     }
 }

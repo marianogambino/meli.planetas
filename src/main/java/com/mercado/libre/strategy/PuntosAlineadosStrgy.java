@@ -5,6 +5,8 @@ import com.mercado.libre.enums.EstadoClimaEnum;
 import com.mercado.libre.model.Planetable;
 import com.mercado.libre.util.CalculoTrigonometrico;
 
+import java.math.BigDecimal;
+
 /**
  *
  */
@@ -28,7 +30,7 @@ public class PuntosAlineadosStrgy implements Strategy{
         if(estaAlineados) { // forman una recta
 
             Boolean estaAlineadosConSol = CalculoTrigonometrico.estanAlineados(
-                    0D, 0D,
+                    BigDecimal.ZERO, BigDecimal.ZERO,
                     p1.getPunto().getX(), p1.getPunto().getY(),
                     p2.getPunto().getX(), p2.getPunto().getY());
 

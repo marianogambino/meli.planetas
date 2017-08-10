@@ -9,13 +9,14 @@ import com.mercado.libre.model.Vulcano;
 import com.mercado.libre.strategy.PuntosAlineadosStrgy;
 import com.mercado.libre.strategy.Strategy;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Aplicar SOLID
  */
 public class PrediccionClima implements Predecible {
 
@@ -28,7 +29,7 @@ public class PrediccionClima implements Predecible {
     private Map<Integer, EstadoClimaEnum> diasEstados = new HashMap<Integer, EstadoClimaEnum>();
     private Map<EstadoClimaEnum, List<List<Integer>>> periodos = new HashMap<EstadoClimaEnum, List<List<Integer>>>();
 
-    private Double perimetroMax = 0D;
+    private BigDecimal perimetroMax = BigDecimal.ZERO;
     private Integer diaMaxLluvia = 0;
     private final static Integer RAD_360 = 360;
 
@@ -49,19 +50,33 @@ public class PrediccionClima implements Predecible {
             vulcano.desplazate();
             betasoide.desplazate();
             //si estan alineados
-            Result result = this.strategy.execute(ferengi,vulcano,betasoide);
-            diasEstados.put(i,result.getEstado());
+            Result result = this.strategy.execute(ferengi, vulcano, betasoide);
+            diasEstados.put(i, result.getEstado());
 
-            if(result.getPerimetro() > perimetroMax){
-                perimetroMax = result.getPerimetro();
-                diaMaxLluvia = i;
+            calcularDiaMaxLluvia(result.getPerimetro(), i);
+            calcularPeriodos(result.getEstado(), i);
+        }
+
+    }
+
+
+    private void calcularDiaMaxLluvia(BigDecimal perimetro, int dia){
+        if(perimetro.compareTo(perimetroMax) > 0){
+            perimetroMax = perimetro;
+            diaMaxLluvia = dia;
+        }
+    }
+
+    private void calcularPeriodos(EstadoClimaEnum estado, int dia){
+
+        if(dia != 0 && estado != EstadoClimaEnum.NUBLADO) {
+            if (diasEstados.get(dia - 1) == estado) {
+                periodos.get(estado).get(periodos.get(estado).size() - 1).add(dia);
+            } else {
+                List<Integer> lista = new ArrayList<Integer>();
+                lista.add(dia);
+                periodos.get(estado).add(lista);
             }
-
-            //diasEstados.get(i-1) == estado;
-                //periodos.get(estado).get(periodos.get(estado).size-1).add(i);
-            //else
-                //lista = new arraylist().add(i)
-            //periodos.get(estado).get().add(lista);
         }
     }
 

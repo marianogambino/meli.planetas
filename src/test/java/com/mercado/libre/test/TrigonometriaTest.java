@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,26 @@ public class TrigonometriaTest {
 
     @Before
     public void setUp(){
+
+    }
+
+    @Test
+    public void calculoTrigonometrico(){
+
+        Double x = 1000 * Math.cos(Math.toRadians(90));
+        Double y = 1000 * Math.sin(Math.toRadians(90));
+
+        BigDecimal xx = BigDecimal.valueOf(x);
+        BigDecimal yy = BigDecimal.valueOf(y);
+
+        BigDecimal xx1 = new BigDecimal(x);
+        BigDecimal yy1 = new BigDecimal(y);
+
+        Assert.assertEquals(x.doubleValue(), 6.123233995736766E-14, 0) ;
+        Assert.assertEquals(y.doubleValue(), 1000D, 0) ;
+
+        Assert.assertEquals(xx.setScale(2, RoundingMode.DOWN), BigDecimal.valueOf(0.00).setScale(2, RoundingMode.DOWN)) ;
+        Assert.assertEquals(yy, BigDecimal.valueOf(1000.0)) ;
 
     }
 
@@ -56,27 +78,25 @@ public class TrigonometriaTest {
         betasoide.desplazate();
         vulcano.desplazate();
 
-        Assert.assertEquals(ferengi.getPunto().getX().doubleValue() , 0.087262032186418D, 0D);
-        Assert.assertEquals(ferengi.getPunto().getY().doubleValue() , 4.999238475781956, 0D);
+        Assert.assertEquals(ferengi.getPunto().getX() , BigDecimal.valueOf(8.7));
+        Assert.assertEquals(ferengi.getPunto().getY() ,  BigDecimal.valueOf(500.0));
 
-        Assert.assertEquals(betasoide.getPunto().getX().doubleValue() , 1.0467191248588794, 0D);
-        Assert.assertEquals(betasoide.getPunto().getY().doubleValue() , 19.972590695091476D, 0D);
+        Assert.assertEquals(betasoide.getPunto().getX().doubleValue() , 104.6, 0D);
+        Assert.assertEquals(betasoide.getPunto().getY().doubleValue() , 1997.3, 0D);
 
-        Assert.assertEquals(vulcano.getPunto().getX().doubleValue() , -0.8715574274765824D, 0D);
-        Assert.assertEquals(vulcano.getPunto().getY().doubleValue() , 9.961946980917455D, 0D);
+        Assert.assertEquals(vulcano.getPunto().getX().doubleValue() , -87.1, 0D);
+        Assert.assertEquals(vulcano.getPunto().getY().doubleValue() , 996.2, 0D);
 
     }
 
     @Test
     public void calcularPuntosEnUnaRectaPrimerDia(){
-        ferengi.desplazate();
-        betasoide.desplazate();
-        vulcano.desplazate();
+
         Double result = (vulcano.getPunto().getX().doubleValue()- ferengi.getPunto().getX().doubleValue()) * (betasoide.getPunto().getY().doubleValue()- vulcano.getPunto().getY().doubleValue());
         Double result2 = (vulcano.getPunto().getY().doubleValue()- ferengi.getPunto().getY().doubleValue()) * (betasoide.getPunto().getX().doubleValue()-vulcano.getPunto().getX().doubleValue() );
 
-        Assert.assertNotEquals(result, result2);
-        Assert.assertFalse(
+        Assert.assertEquals(result, result2);
+        Assert.assertTrue(
                 estanAlineados( ferengi.getPunto().getX(), ferengi.getPunto().getY(),
                                 vulcano.getPunto().getX(),vulcano.getPunto().getY(),
                                 betasoide.getPunto().getX(), betasoide.getPunto().getY()  ));
@@ -105,15 +125,15 @@ public class TrigonometriaTest {
         Boolean orientacionA1A2P =
                 calcularOrientacion(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
                         vulcano.getPunto().getX(),vulcano.getPunto().getY(),
-                        0D,0D);
+                        new BigDecimal(0), new BigDecimal(0) );
 
         Boolean orientacionA2A3P =
                 calcularOrientacion(vulcano.getPunto().getX(),vulcano.getPunto().getY(),
-                        betasoide.getPunto().getX(), betasoide.getPunto().getY(), 0D, 0D);
+                        betasoide.getPunto().getX(), betasoide.getPunto().getY(), new BigDecimal(0), new BigDecimal(0));
 
         Boolean orientacionA3A1P =
                 calcularOrientacion(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
-                        betasoide.getPunto().getX(), betasoide.getPunto().getY(), 0D,0D);
+                        betasoide.getPunto().getX(), betasoide.getPunto().getY(), new BigDecimal(0), new BigDecimal(0));
 
 
         Assert.assertFalse(orientacionInicial);
@@ -129,32 +149,42 @@ public class TrigonometriaTest {
         betasoide.desplazate();
         vulcano.desplazate();
 
-        Double perimetro = calcularPerimetro(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
+        BigDecimal perimetro = calcularPerimetro(ferengi.getPunto().getX(), ferengi.getPunto().getY(),
                                              vulcano.getPunto().getX(),vulcano.getPunto().getY(),
                                              betasoide.getPunto().getX(), betasoide.getPunto().getY());
 
-        Assert.assertEquals(perimetro, 30.251325208000175 , 0D);
+        Assert.assertEquals(perimetro.setScale(2, BigDecimal.ROUND_UP), BigDecimal.valueOf(3025.03 ));
 
     }
 
-    private Boolean estanAlineados(Double x1 , Double y1 , Double x2 , Double y2, Double x3 , Double y3 ){
-        Double result = (x2-x1)*(y3-y2);
-        Double result1 = (y2-y1)*(x3-x2);
-        return result==result1;
+    private Boolean estanAlineados(BigDecimal x1 , BigDecimal y1 , BigDecimal x2 , BigDecimal y2, BigDecimal x3 , BigDecimal y3 ){
+
+        BigDecimal calculo1 = x2.subtract(x1).multiply( ( y3.subtract(y2)) );
+        BigDecimal calculo2 = y2.subtract(y1).multiply( ( x3.subtract(x2)) );
+
+        //Double result = (x2-x1)*(y3-y2);
+        //Double result1 = (y2-y1)*(x3-x2);
+
+        return calculo1.compareTo(calculo2) == 0;
     }
 
-    private Boolean calcularOrientacion(Double x1 , Double y1 , Double x2 , Double y2, Double x3 , Double y3){
-        return ( ((x1 - x3) * (y2 - y3) - (y1 - y3) * (x2 - x3)) >= 0 );
+    private Boolean calcularOrientacion(BigDecimal x1 , BigDecimal y1 , BigDecimal x2 , BigDecimal y2, BigDecimal x3 , BigDecimal y3){
+        BigDecimal calculo1 = x1.subtract(x3).multiply( ( y2.subtract(y3)) );
+        BigDecimal calculo2 = y1.subtract(y3).multiply( ( x2.subtract(x3)) );
+
+        BigDecimal result = calculo1.subtract(calculo2);
+        return ( result.compareTo(BigDecimal.ZERO) > 0 || result.compareTo(BigDecimal.ZERO) == 0 ) ;
     }
 
-    private Double calcularPerimetro(Double x1 , Double y1 , Double x2 , Double y2, Double x3 , Double y3){
-        Double ladoAB = calcularLados(x1, y1, x2, y2);
-        Double ladoAC = calcularLados(x1, y1, x3, y3);
-        Double ladoBC = calcularLados(x2, y2, x3, y3);
-        return ladoAB + ladoAC + ladoBC;
+    private BigDecimal calcularPerimetro(BigDecimal x1 , BigDecimal y1 , BigDecimal x2 , BigDecimal y2, BigDecimal x3 , BigDecimal y3){
+        BigDecimal ladoAB = calcularLados(x1, y1, x2, y2);
+        BigDecimal ladoAC = calcularLados(x1, y1, x3, y3);
+        BigDecimal ladoBC = calcularLados(x2, y2, x3, y3);
+        return ladoAB.add(ladoAC).add(ladoBC);
     }
 
-    private Double calcularLados(Double x1 , Double y1 , Double x2 , Double y2){
-        return Math.sqrt( Math.pow( (x2-x1), 2 ) + Math.pow( (y2-y1), 2 ) );
+    private BigDecimal calcularLados(BigDecimal x1 , BigDecimal y1 , BigDecimal x2 , BigDecimal y2){
+
+        return new BigDecimal(Math.sqrt( Math.pow( (x2.doubleValue()-x1.doubleValue()), 2 ) + Math.pow( (y2.doubleValue()-y1.doubleValue()), 2 ) ));
     }
 }

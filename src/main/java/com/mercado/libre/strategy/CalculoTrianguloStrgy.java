@@ -6,12 +6,14 @@ import com.mercado.libre.model.Planetable;
 import com.mercado.libre.model.Punto;
 import com.mercado.libre.util.CalculoTrigonometrico;
 
+import java.math.BigDecimal;
+
 /**
  *
  */
 public class CalculoTrianguloStrgy implements Strategy{
 
-    private final static Punto SOL = new Punto(0D, 0D);
+    private final static Punto SOL = new Punto(new BigDecimal(0), new BigDecimal(0));
     private Double perimetroMax = 0D;
 
     @Override
@@ -26,7 +28,7 @@ public class CalculoTrianguloStrgy implements Strategy{
         result.setEstado(EstadoClimaEnum.NUBLADO);
         if(orientacionInicial == orientacionA1A2P ==  orientacionA2A3P == orientacionA3A1P){
 
-            Double perimetro = CalculoTrigonometrico.calcularPerimetro(p1.getPunto().getX(), p1.getPunto().getY(),
+            BigDecimal perimetro = CalculoTrigonometrico.calcularPerimetro(p1.getPunto().getX(), p1.getPunto().getY(),
                     p2.getPunto().getX(),p2.getPunto().getY(),
                     p3.getPunto().getX(), p3.getPunto().getY());
             result.setPerimetro(perimetro);

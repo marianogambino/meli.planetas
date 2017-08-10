@@ -20,10 +20,13 @@ public class PrediccionClimaRefactorTest {
 
     @Test
     public void prediccionClima(){
-        prediccionClima.predecir(10, 5);
+        prediccionClima.predecir(10, 5); //
 
         Assert.assertEquals(prediccionClima.getDiasEstado().get(566).estado(), EstadoClimaEnum.LLUVIA.estado());
-        Assert.assertTrue(prediccionClima.getDiaMaxLluvia() == 611);
+        Assert.assertTrue(prediccionClima.getDiaMaxLluvia() == 612);
+        Assert.assertTrue(prediccionClima.getCantPeriodosCOPT() == 0);
+        Assert.assertTrue(prediccionClima.getCantPeriodosLluvia() == 42);
+        Assert.assertTrue(prediccionClima.getCantPeriodosSequia()== 1);
     }
 
 }

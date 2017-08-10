@@ -1,5 +1,8 @@
 package com.mercado.libre.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Clase Planeta
  */
@@ -50,20 +53,24 @@ public class Planeta implements Planetable {
      */
     public void desplazate() {
         calcularPosicionAngular();
-        Double x = this.distanciaAlSol * Math.cos(Math.toRadians(this.posicionAngular));
-        Double y = this.distanciaAlSol * Math.sin(Math.toRadians(this.posicionAngular));
-        this.punto = new Punto(x, y );
+        BigDecimal cos = new BigDecimal(Math.cos(Math.toRadians(this.posicionAngular)));
+        BigDecimal sin = new BigDecimal( Math.sin(Math.toRadians(this.posicionAngular)) );
+        BigDecimal x = cos.multiply(new BigDecimal(this.distanciaAlSol));
+        BigDecimal y = sin.multiply( new BigDecimal(this.distanciaAlSol )) ;
+        this.punto = new Punto(x.setScale(2, RoundingMode.HALF_DOWN), y.setScale(2, RoundingMode.HALF_DOWN) );
     }
 
     private void calcularPosicionAngular(){
         Integer posAngular = this.posicionAngular + this.movimientoAngular;
         if( posAngular < 0 ){
             posAngular = GRADO_360 - posAngular;
-        } else  if (posAngular > GRADO_360){
+        } else  if (posAngular.compareTo(GRADO_360) > 0){
             posAngular = posAngular - GRADO_360;
         }
         this.posicionAngular = posAngular;
     }
+
+
 
 
 }
