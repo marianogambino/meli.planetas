@@ -1,7 +1,7 @@
 package com.mercado.libre.test;
 
 import com.mercado.libre.enums.EstadoClimaEnum;
-import com.mercado.libre.servicio.PrediccionClima;
+import com.mercado.libre.service.PrediccionClima;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,10 @@
 package com.mercado.libre.restservice;
 
 import com.mercado.libre.enums.EstadoClimaEnum;
-import com.mercado.libre.model.Dia;
+import com.mercado.libre.model.Day;
+import com.mercado.libre.service.WeatherService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,12 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("vulcano/{dia}")
 public class PlanetRestController {
 
+    @Qualifier("weatherServiceImpl")
+    @Autowired
+    private WeatherService service;
+
     PlanetRestController(){
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    Dia readWeather(@PathVariable int dia){
-        return new Dia(1, EstadoClimaEnum.CONDICIONES_NORMALES);
+    Day readWeather(@PathVariable int dia){
+        return service.getDay(dia);
     }
 
 

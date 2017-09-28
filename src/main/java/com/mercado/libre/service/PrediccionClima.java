@@ -1,4 +1,4 @@
-package com.mercado.libre.servicio;
+package com.mercado.libre.service;
 
 import com.mercado.libre.Resolution.Result;
 import com.mercado.libre.enums.EstadoClimaEnum;
