@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by mariano on 03/07/17.
  */
 @RestController
-@RequestMapping("vulcano/{dia}")
 public class PlanetRestController {
 
     @Qualifier("weatherServiceImpl")
@@ -24,7 +23,7 @@ public class PlanetRestController {
     PlanetRestController(){
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "vulcano/{dia}", method = RequestMethod.GET)
     Day readWeather(@PathVariable int dia){
         return service.getDay(dia);
     }

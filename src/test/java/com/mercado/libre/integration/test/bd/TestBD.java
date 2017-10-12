@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(
         classes = Application.class)
 @TestPropertySource(
-        locations = "classpath:application.properties")
+        locations = "classpath:application.yml")
 @ContextConfiguration(classes = Application .class)
 
 public class TestBD {
